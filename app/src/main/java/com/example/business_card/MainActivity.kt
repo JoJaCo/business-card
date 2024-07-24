@@ -1,11 +1,13 @@
 package com.example.business_card
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,10 +18,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -28,9 +36,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.textInputServiceFactory
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.business_card.ui.theme.BusinesscardTheme
 
 class MainActivity : ComponentActivity() {
@@ -64,27 +75,13 @@ fun CreateBizCard(){
             elevation = CardDefaults.cardElevation(10.dp)) {
 
 
-            Column(modifier = Modifier.height(300.dp),
+            Column(modifier = Modifier.height(400.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally) {
-
-                Surface(
-                    modifier = Modifier
-                        .size(150.dp)
-                        .padding(5.dp),
-                    shape = CircleShape,
-                    border = BorderStroke(0.5.dp, Color.DarkGray),
-                    shadowElevation = 4.dp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.profile_image),
-                        contentDescription = "user picture",
-                        modifier = Modifier.size(135.dp)
-                    )
-
-                }
-
+                CreateImageProfile()
+                Divider()
+                ClientInfo()
+                ProfileButton()
 
             }
         }
@@ -94,7 +91,82 @@ fun CreateBizCard(){
 
 }
 
-@Preview(showBackground = true)
+@Preview
+@Composable
+fun Content(){
+    Box(modifier = Modifier
+        .fillMaxHeight()
+        .fillMaxWidth()
+        .padding(5.dp)){
+        Surface(modifier = Modifier.padding(3.dp)
+            .fillMaxWidth()
+            .fillMaxHeight(),
+            shape = RoundedCornerShape(corner = CornerSize(6.dp)),
+            border = BorderStroke(width = 2.dp, color = Color.LightGray)
+
+        ) {
+
+            Portfolio(data = listOf("Project1","Project2","Project3"))
+
+        }
+    }
+
+}
+
+@Composable
+fun Portfolio(data: List<String>) {
+    Text("Portfolio go here ")
+
+}
+
+@Composable
+private fun ProfileButton() {
+    Button(
+        onClick = { Log.d("Clicked main", "CreateBizCard: clicked") },
+        modifier = Modifier
+            .padding(top = 30.dp)
+            .size(width = 150.dp, height = 40.dp),
+        shape = CutCornerShape(20.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.Magenta)
+    ) {
+        Text(
+            text = "Profile",
+            style = MaterialTheme.typography.bodyMedium
+        )
+
+    }
+}
+
+@Composable
+private fun ClientInfo() {
+    Column(modifier = Modifier.padding(5.dp)) {
+        Text(text = "Jorge Contreras", style = MaterialTheme.typography.headlineLarge)
+        Text(text = "Android Compose Programmer", fontSize = 20.sp)
+        Text(text = "@joji.ai", color = Color.Blue, fontSize = 20.sp)
+    }
+}
+
+@Composable
+private fun CreateImageProfile(modifier: Modifier = Modifier) {
+    Surface(
+        modifier = Modifier
+            .size(150.dp)
+            .padding(5.dp),
+        shape = CircleShape,
+        border = BorderStroke(0.5.dp, Color.DarkGray),
+        shadowElevation = 4.dp,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.profile_image),
+            contentDescription = "user picture",
+            modifier = Modifier.size(135.dp)
+        )
+
+    }
+}
+
+//@Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     CreateBizCard()
