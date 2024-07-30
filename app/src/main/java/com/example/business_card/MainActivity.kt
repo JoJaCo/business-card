@@ -16,6 +16,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.CutCornerShape
@@ -32,6 +34,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -60,9 +64,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+//the card overall
 @Composable
 fun CreateBizCard(){
+    var buttonClickedState = remember {
+        mutableStateOf(value = false)
+    }
     Surface(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()) {
@@ -75,13 +82,36 @@ fun CreateBizCard(){
             elevation = CardDefaults.cardElevation(10.dp)) {
 
 
-            Column(modifier = Modifier.height(400.dp),
+            Column(modifier = Modifier.height(700.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 CreateImageProfile()
                 Divider()
                 ClientInfo()
-                ProfileButton()
+                Button(
+                    onClick = {
+                              buttonClickedState.value = !buttonClickedState.value
+
+
+                    },
+                    modifier = Modifier
+                        .padding(top = 30.dp)
+                        .size(width = 150.dp, height = 40.dp),
+                    shape = CutCornerShape(20.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Magenta)
+                ) {
+                    Text(
+                        text = "Profile",
+                        style = MaterialTheme.typography.bodyMedium)
+
+                }
+                if (buttonClickedState.value){
+                    Content()
+                }else{
+                    Box() {
+
+                    }
+                }
 
             }
         }
@@ -90,7 +120,7 @@ fun CreateBizCard(){
     }
 
 }
-
+//
 @Preview
 @Composable
 fun Content(){
@@ -98,7 +128,8 @@ fun Content(){
         .fillMaxHeight()
         .fillMaxWidth()
         .padding(5.dp)){
-        Surface(modifier = Modifier.padding(3.dp)
+        Surface(modifier = Modifier
+            .padding(3.dp)
             .fillMaxWidth()
             .fillMaxHeight(),
             shape = RoundedCornerShape(corner = CornerSize(6.dp)),
@@ -115,28 +146,14 @@ fun Content(){
 
 @Composable
 fun Portfolio(data: List<String>) {
-    Text("Portfolio go here ")
-
+    LazyColumn{items(data){ item ->
+    Text(text = item)
+    } }
 }
 
-@Composable
-private fun ProfileButton() {
-    Button(
-        onClick = { Log.d("Clicked main", "CreateBizCard: clicked") },
-        modifier = Modifier
-            .padding(top = 30.dp)
-            .size(width = 150.dp, height = 40.dp),
-        shape = CutCornerShape(20.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Magenta)
-    ) {
-        Text(
-            text = "Profile",
-            style = MaterialTheme.typography.bodyMedium
-        )
 
-    }
-}
 
+//info of the client
 @Composable
 private fun ClientInfo() {
     Column(modifier = Modifier.padding(5.dp)) {
@@ -145,7 +162,7 @@ private fun ClientInfo() {
         Text(text = "@joji.ai", color = Color.Blue, fontSize = 20.sp)
     }
 }
-
+//for the image
 @Composable
 private fun CreateImageProfile(modifier: Modifier = Modifier) {
     Surface(
@@ -166,7 +183,7 @@ private fun CreateImageProfile(modifier: Modifier = Modifier) {
     }
 }
 
-//@Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     CreateBizCard()
